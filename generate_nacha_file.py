@@ -23,13 +23,17 @@ def get_file_mimetype(file_path):
         return 'application/octet-stream'
     return mime_type
 
-def encode_file(file_path):
-    """Read a file and encode its contents in base64"""
+def encode_ifrequired(file_path):
+    """Read a file and encode its contents in base64 for pdf files"""
+    
+    mime_type = get_file_mimetype(file_path)
+    
     with open(file_path, 'rb') as file:
         file_data = file.read()
     
+    
     file_base64 = base64.b64encode(file_data).decode('utf-8')
-    mime_type = get_file_mimetype(file_path)
+    
     print(f"Encoded {file_path} with MIME type {mime_type} and size {len(file_base64)} bytes")
     
     return {
@@ -72,20 +76,17 @@ def claude_api_with_attachments(files, prompt, model="claude-3-7-sonnet-20250219
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"File not found: {file_path}")
         
-        file_data = encode_file(file_path)
+        file_data = encode_ifrequired(file_path)
         
         message_object = {
             "type": "image" if file_data["type"].startswith("image/") else "document",
             "source": {
-                "type": "base64",
+                "type": "base64" if file_data["type"] == "application/pdf" else "text",
                 "data": file_data["data"],
                 "media_type": file_data["type"],
             }
         }
          
-        # Only add media_type for PDF files
-        if file_data["type"] == "application/pdf":
-          message_object["source"]["media_type"] = file_data["type"]
         
         message_content.append(message_object)
        
