@@ -9,6 +9,9 @@ __pycache__/
 # vscode
 .vscode/
 
+# few python files - which are domains specific.
+db_fetch.py
+
 # Distribution / packaging
 .Python
 build/

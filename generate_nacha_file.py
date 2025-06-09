@@ -13,6 +13,7 @@ The first is a NACHA file format documentation.
 You will study the structure of the NACHA file and how each field is used in the file and how to format each field and the whole file.
 The second file is a sample NACHA payment file.
 Your task is to re-generate NACHA second file ( sample NACHA file) as per the instructions provided in the prompt.
+I just need the NACHA file content, no explanations or additional text.
 """
 
 def get_file_mimetype(file_path):
@@ -41,7 +42,7 @@ def encode_ifrequired(file_path):
         "data": file_base64
     }
 
-def claude_api_with_attachments(files, prompt, model="claude-3-7-sonnet-20250219", max_tokens=2000, output_file=None):
+def claude_api_with_attachments(files, prompt, model="claude-sonnet-4-20250514", max_tokens=2000, output_file=None):
     """
     Send a request to Claude API with file attachments using the Anthropic Python SDK
     
@@ -105,13 +106,16 @@ def claude_api_with_attachments(files, prompt, model="claude-3-7-sonnet-20250219
     )
     
     # Save response to output file if specified
+    final_response = ""
     if output_file:
         with open(output_file, 'w', encoding='utf-8') as f:
             for content in message.content:
                 if content.type == "text":
                     f.write(content.text)
+                    final_response = content.text
+                
     
-    return message
+    return final_response
 
 if __name__ == "__main__":
     # Load environment variables from .env file

@@ -1,0 +1,31 @@
+   "fileHeader": {
+      "immediateDestinations": [
+        {"code": "071000505", "name": "LaSalle Bank N.A."},
+        {"code": "072000805", "name": "Standard Federal Bank"}
+      ],
+      "priorityCodes": ["01"],
+      "formatCodes": ["1"]
+    },
+    "batchHeader": {
+      "serviceClassCodes": {
+        "mixed": "200",
+        "creditsOnly": "220",
+        "debitsOnly": "225"
+      },
+      "standardEntryClassCodes": ["PPD", "CCD", "CTX", "WEB", "TEL"],
+      "companyEntryDescriptions": ["PAYROLL", "PAYMENT", "TRANSFER", "DIVIDEND", "LOAN PMT"]
+    },
+    "entryDetail": {
+      "transactionCodes": {
+        "checkingCredit": "22",
+        "checkingDebit": "27",
+        "savingsCredit": "32",
+        "savingsDebit": "37"
+      },
+      "routingNumbers": ["123456789", "987654321", "456789123", "321654987"],
+      "accountNumbers": ["ACCT00001", "ACCT00002", "ACCT00003", "1234567890"],
+      "amounts": [100.50, 250.75, 1000.00, 500.25, 75.00],
+      "companyNames": ["ACME CORP", "XYZ INC", "ABC COMPANY", "SMITH LLC"],
+      "individualNames": ["JOHN DOE", "JANE SMITH", "ROBERT BROWN", "SARAH JOHNSON"]
+    }
+  }

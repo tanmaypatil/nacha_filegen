@@ -1,0 +1,8 @@
+Generate a NACHA file with:
+- 2 payments using CCD as SEC code
+- Company ID: 9172120099
+- Debit account: XXX
+- First payment: credit account YY1 with $100
+- Second payment: credit account YY2 with $200
+- Use "Transfer" as the company entry description
+- Effective date: 210512

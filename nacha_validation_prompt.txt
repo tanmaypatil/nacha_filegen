@@ -1,0 +1,95 @@
+You are a Python expert specializing in financial data processing and ACH/NACHA file validation. Create a comprehensive Python script that validates NACHA format files according to the standard specifications. The NACHA format is a standard for ACH (Automated Clearing House) transactions.
+NACHA File Structure
+The NACHA file consists of the following record types, each 94 characters long:
+
+File Header Record (Type 1) - Occurs once at the beginning of the file
+Batch Header Record(s) (Type 5) - Marks the beginning of each batch
+Entry Detail Record(s) (Type 6) - Transaction details within a batch
+Entry Detail Addenda Record(s) (Type 7) - Optional, follows Entry Detail Records
+Batch Control Record(s) (Type 8) - Ends each batch
+File Control Record (Type 9) - Occurs once at the end of the file
+
+Record Type Specifications
+File Header Record (Type 1)
+
+Record Type Code: Position 01-01, Value '1', Mandatory
+Priority Code: Position 02-03, Value '01', Required
+Immediate Destination: Position 04-13, Format: 'bXXXXXXXXX', Mandatory
+Immediate Origin: Position 14-23, Format: 'NNNNNNNNNN', Mandatory
+File Creation Date: Position 24-29, Format: 'YYMMDD', Mandatory
+File Creation Time: Position 30-33, Format: 'HHMM', Optional
+File ID Modifier: Position 34-34, Format: A-Z or 0-9, Mandatory
+Record Size: Position 35-37, Value '094', Mandatory
+Blocking Factor: Position 38-39, Value '10', Mandatory
+Format Code: Position 40-40, Value '1', Mandatory
+Immediate Destination Name: Position 41-63, Optional
+
+Batch Header Record (Type 5)
+
+Record Type Code: Position 01-01, Value '5', Mandatory
+Service Class Code: Position 02-04, Values: 200, 220, 225, Mandatory
+Company Name: Position 05-20, Alphanumeric, Mandatory
+Company Discretionary Data: Position 21-40, Alphanumeric, Optional
+Company Identification: Position 41-50, Format: 'NNNNNNNNNN', Mandatory
+Standard Entry Class Code: Position 51-53, Alpha, Mandatory (PPD, CCD, CTX, etc.)
+Company Entry Description: Position 54-63, Alphanumeric, Mandatory
+Company Descriptive Date: Position 64-69, Format: 'YYMMDD', Optional
+Effective Entry Date: Position 70-75, Format: 'YYMMDD', Required
+
+Entry Detail Record (Type 6)
+
+Record Type Code: Position 01-01, Value '6', Mandatory
+Transaction Code: Position 02-03, Valid values: 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39, Mandatory
+Receiving DFI Identification: Position 04-11, Format: 'TTTTAAAA', Mandatory
+Check Digit: Position 12-12, Numeric, Mandatory
+DFI Account Number: Position 13-29, Alphanumeric, Required
+Amount: Position 30-39, Format: '$$$$$$$$cc', Mandatory
+Individual Identification Number: Position 40-54, Alphanumeric, Optional/Required based on SEC
+Individual Name: Position 55-76, Alphanumeric, Required
+Discretionary Data: Position 77-78, Alphanumeric, Optional
+Addenda Record Indicator: Position 79-79, Values: '0' or '1', Mandatory
+
+Addenda Record (Type 7)
+
+Record Type Code: Position 01-01, Value '7', Mandatory
+Addenda Type Code: Position 02-03, Values: '02', '05', '98', '99', Mandatory
+Payment Related Information: Position 04-83, Alphanumeric, Optional
+Addenda Sequence Number: Position 84-87, Numeric, Mandatory
+Entry Detail Sequence Number: Position 88-94, Numeric, Mandatory
+
+Batch Control Record (Type 8)
+
+Record Type Code: Position 01-01, Value '8', Mandatory
+Service Class Code: Position 02-04, Must match Batch Header, Mandatory
+Entry/Addenda Count: Position 05-10, Numeric, Mandatory
+Entry Hash: Position 11-20, Numeric, Mandatory
+Total Debit Entry Dollar Amount: Position 21-32, Format: '$$$$$$$$$cc', Mandatory
+Total Credit Entry Dollar Amount: Position 33-44, Format: '$$$$$$$$$cc', Mandatory
+Company Identification: Position 45-54, Must match Batch Header, Required
+
+File Control Record (Type 9)
+
+Record Type Code: Position 01-01, Value '9', Mandatory
+Batch Count: Position 02-07, Numeric, Mandatory
+Block Count: Position 08-13, Numeric, Mandatory
+Entry/Addenda Count: Position 14-21, Numeric, Mandatory
+Entry Hash: Position 22-31, Numeric, Mandatory
+Total Debit Entry Dollar Amount: Position 32-43, Format: '$$$$$$$$$$cc', Mandatory
+Total Credit Entry Dollar Amount: Position 44-55, Format: '$$$$$$$$$$cc', Mandatory
+
+Validation Requirements
+The validation script should:
+
+Parse a NACHA file line by line, ensuring each record is 94 characters
+Verify that record types appear in the correct sequence
+Validate all required fields in each record type according to specifications
+Calculate and verify control totals:
+
+Entry/Addenda counts
+Entry hash values (sum of routing numbers)
+Dollar amounts for debits and credits
+
+
+Calculate check digits for routing numbers
+Track batch-level and file-level totals
+Generate detailed validation errors with record, field, and position information
