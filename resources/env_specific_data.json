@@ -1,0 +1,8 @@
+{
+    "FileHeader" : {
+        "Immediate Origin": {
+            "values" : ["020010001","121057262","121000999","020030001"],
+            "db_mapping" : "DB table-NCC , column name-NCC_CODE " 
+        }
+    }
+}

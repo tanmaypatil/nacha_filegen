@@ -7,12 +7,16 @@ from dotenv import load_dotenv
 from anthropic import Anthropic
 
 system_prompt = """
-you are a helpful assistant . 
-You will be provided with two files. 
-The first is a NACHA file format documentation.
+you are a payment domain expert and you have a detailed understanding of NACHA clearing and its terminology. 
+The task is to generate a NACHA file based on the provided specifications and sample files for a specific test environment.
+You will be provided with three files. 
+The first is a **NACHA file format documentation**.
 You will study the structure of the NACHA file and how each field is used in the file and how to format each field and the whole file.
-The second file is a sample NACHA payment file.
-Your task is to re-generate NACHA second file ( sample NACHA file) as per the instructions provided in the prompt.
+The second file is a **sample NACHA payment file**. Second file you will use as a reference to generate the NACHA file.
+The third file is a JSON file containing **test environment-specific data**. You will use this data to fill in important fields in NACHA file.
+In case the value is specified in the prompt use the value to populated in NACHA file ( e.g immediate Origin) .
+In cases where it is not specified in the prompt ,you will pick up one of the values from the json file .
+You will generate a NACHA file based exactly as per NACHA file format documentation and the prompt.
 I just need the NACHA file content, no explanations or additional text.
 """
 
@@ -26,17 +30,17 @@ def get_file_mimetype(file_path):
 
 def encode_ifrequired(file_path):
     """Read a file and encode its contents in base64 for pdf files"""
-    
     mime_type = get_file_mimetype(file_path)
     
     with open(file_path, 'rb') as file:
         file_data = file.read()
     
-    
     file_base64 = base64.b64encode(file_data).decode('utf-8')
-    
     print(f"Encoded {file_path} with MIME type {mime_type} and size {len(file_base64)} bytes")
     
+    if mime_type != 'application/pdf':
+        mime_type = 'text/plain'  # Treat non-pdf files as text/plain for Claude compatibility
+        
     return {
         "type": mime_type, 
         "data": file_base64
