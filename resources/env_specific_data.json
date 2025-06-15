@@ -1,8 +1,34 @@
 {
-    "FileHeader" : {
+    "FileHeader": {
+        "Immediate Destination": {
+            "possible_values": [
+                "020010001",
+                "121057262",
+                "121000999",
+                "020030001"
+            ],
+            "selection_type": "random",
+            "description": "Position 04-13, Format: 'bXXXXXXXXX', b-blank .Mandatory "
+        },
         "Immediate Origin": {
-            "values" : ["020010001","121057262","121000999","020030001"],
-            "db_mapping" : "DB table-NCC , column name-NCC_CODE " 
+            "possible_values": [
+                "112000011",
+                "121000999",
+                "131313131"
+            ],
+            "selection_type": "random",
+            "description": "Position 14-23, Format: 'NNNNNNNNNN', Mandatory "
+        },
+        "BatchHeader" : {
+            "Company Name": {
+                "possible_values": [
+                    "First National Bank",
+                    "Federal Reserve Bank",
+                    "First United Bank"
+                ],
+                "selection_type": "random",
+                "description": "Position 05-20, Alphanumeric, Mandatory "
+            }
         }
     }
 }

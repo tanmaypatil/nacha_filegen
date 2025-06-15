@@ -1,6 +1,7 @@
 
 from dotenv import load_dotenv
 from generate_nacha_file import claude_api_with_attachments
+from json_util import json_to_simple_text
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,4 +46,8 @@ def test_gen_2():
         if content.type == "text":
             print(content.text)
     print(f"\nResponse has been saved to: {output_file}")
+    
+def test_print_json():
+  text = json_to_simple_text("resources/env_specific_data.json")
+  print(text)
   

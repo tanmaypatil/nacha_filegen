@@ -6,6 +6,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
+from json_util import json_to_simple_text
+
 system_prompt = """
 you are a payment domain expert and you have a detailed understanding of NACHA clearing and its terminology. 
 The task is to generate a NACHA file based on the provided specifications and sample files for a specific test environment.
@@ -13,11 +15,8 @@ You will be provided with three files.
 The first is a **NACHA file format documentation**.
 You will study the structure of the NACHA file and how each field is used in the file and how to format each field and the whole file.
 The second file is a **sample NACHA payment file**. Second file you will use as a reference to generate the NACHA file.
-The third file is a JSON file containing **test environment-specific data**. You will use this data to fill in important fields in NACHA file.
-In case the value is specified in the prompt use the value to populated in NACHA file ( e.g immediate Origin) .
-In cases where it is not specified in the prompt ,you will pick up one of the values from the json file .
 You will generate a NACHA file based exactly as per NACHA file format documentation and the prompt.
-I just need the NACHA file content, no explanations or additional text.
+Only emit NACHA file content, without quotes, explanations or additional text.
 """
 
 def get_file_mimetype(file_path):
@@ -65,6 +64,10 @@ def claude_api_with_attachments(files, prompt, model="claude-sonnet-4-20250514",
     if not api_key:
         raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
     
+    # append the user prompt with enviornment specific data
+    prompt += "\n\n Use below values strictly" + json_to_simple_text("resources/env_specific_data.json")
+
+    print(f"Prompt being sent to Api \n: {prompt}")
     # Initialize Anthropic client
     client = Anthropic(api_key=api_key)
     

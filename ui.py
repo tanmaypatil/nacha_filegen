@@ -6,7 +6,7 @@ from generate_nacha_file import claude_api_with_attachments
 load_dotenv()
 
 # Specify file paths
-files = ["resources\\NACHA_format.pdf", "resources\\nacha_customer_CT_PPD.txt","resources\\env_specific_data.json"]
+files = ["resources\\NACHA_format.pdf", "resources\\nacha_customer_CT_PPD.txt"]
 
 # Output file path (optional)
 output_file = "nacha_file_response.txt"
